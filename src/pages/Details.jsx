@@ -153,7 +153,7 @@ export default function Details() {
                 }
             } catch (error) { console.log(error) }
             const res = await refetch()
-            saved(res.data)
+            updateSaved(res.data)
             setMessage('пост сохранен')
             handleClick()
             setDep(!dep)
@@ -180,7 +180,7 @@ export default function Details() {
             })
         } catch (error) { console.log(error) }
         const res = await refetch()
-        saved(res.data)
+        updateSaved(res.data)
         // console.log(res.data.admins[counter.current[0]].following);
         setMessage('пост удален из сохраненных')
         handleClick()
