@@ -12,13 +12,13 @@ export default function Edit({ name, career, initialDate, place, documentId, upd
     const today = new Date().toISOString().slice(0, 10)
     const minDate = '1940-01-01'
     const [dateWarning, setDateWarning] = useState('')
-
-    const getDateWarning = (value) => {
+ 
+    const getDateWarning = React.useCallback((value) => {
         if (!value) return ''
         if (value < minDate) return `Год рождения должен быть после ${minDate}.`
         if (value > today) return 'Год рождения не может быть после сегодняшнего дня.'
         return ''
-    }
+    }, [minDate, today])
 
     const clearDate = () => {
         setDate('')

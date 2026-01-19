@@ -1,10 +1,9 @@
-import React, {useEffect,useState} from 'react'
-
+import { useEffect, useState } from 'react'
+ 
 export default function useFetchId(url, n) {
     const [data,setData] = useState(null)
     const [error,setError] = useState(null)
     const [loading,setLoading] = useState(true)
-    const [id, setId] = useState(null)
     
     useEffect(()=>{
         const fetchData = async() => {
@@ -23,7 +22,7 @@ export default function useFetchId(url, n) {
         }
 
         fetchData()
-    }, [url])
+    }, [n, url])
 
     return {loading, error, data}
 }

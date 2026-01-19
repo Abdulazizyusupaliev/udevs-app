@@ -6,10 +6,10 @@ export function usePersistedState(key, initialValue){
         const item = getItem(key);
         return item || initialValue;
     })
-
+ 
     useEffect(()=>{
         setItem(key, value)
-    },[value])
+    },[key, value])
 
     return [value, setValue]
 }
