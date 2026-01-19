@@ -15,6 +15,19 @@
         gap: 20px;
     }
 
+    .posts__empty {
+        border-radius: 16px;
+        padding: 28px 32px;
+        background: linear-gradient(135deg, #eef4ff 0%, #f8fbff 100%);
+        border: 1px solid rgba(27, 91, 247, 0.12);
+        color: #1b2b44;
+        font-family: Roboto;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 1.4;
+        text-align: center;
+    }
+
     .posts__content {
         display: flex;
         justify-content: space-between;

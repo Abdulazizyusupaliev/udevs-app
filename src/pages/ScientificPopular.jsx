@@ -73,7 +73,9 @@ export default function ScientificPopular() {
       <Container>
         <h2 className="scientific__title">Посты в последние 24 часа</h2>
         <div className="posts__intro">
-          {recentPosts.map((e) => (
+          {recentPosts.length === 0 ? (
+            <p className="posts__empty">Пусто{'('}</p>
+          ) : recentPosts.map((e) => (
             <div className="posts__content" key={e.documentId}>
               <img src={getPostImageUrl(e.image)} alt={e.title || 'Post image'} className="left" />
               <div className="right">
