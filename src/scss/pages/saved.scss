@@ -1,0 +1,260 @@
+.saved {
+    .posts {
+        &__intro {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            .posts__content {
+                display: flex;
+                justify-content: space-between;
+                gap: 24px;
+                width: 100%;
+                height: 388px;
+                border-radius: 8px;
+
+
+                img {
+                    width: 50%;
+                    opacity: 1;
+                    border-radius: 8px;
+                }
+
+                .right {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: space-between;
+                    width: 50%;
+
+                    .posts__title {
+                        font-family: Roboto;
+                        font-weight: 500;
+                        font-size: 36px;
+                        line-height: 100%;
+                        letter-spacing: 0%;
+                        max-width: 100%;
+                    }
+
+                    .posts__date-and-time {
+                        font-family: Roboto;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 24px;
+                        letter-spacing: 0%;
+                        color: #AEBEC9;
+                    }
+
+                    .posts__descriptions {
+                        font-family: Roboto;
+                        font-weight: 400;
+                        font-size: 18px;
+                        line-height: 32px;
+                        letter-spacing: 0%;
+                        max-width: 100%;
+                    }
+
+                    &__btns {
+                        display: flex;
+                        align-items: center;
+                        gap: 20px;
+
+                        .read {
+                            width: 153.6236572265625px;
+                            height: 48px;
+                            opacity: 1;
+                            gap: 10px;
+                            border-radius: 8px;
+                            border: 2px solid #1B5BF7;
+                            color: white;
+                            background-color: #1B5BF7;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            &:hover {
+                                color: #1B5BF7;
+                                background-color: white;
+                                border: 2px solid #1B5BF7;
+                                transition: .4s;
+                            }
+
+                            font-family: Roboto;
+                            font-weight: 400;
+                            font-size: 18px;
+                            line-height: 24px;
+                            letter-spacing: 0%;
+
+                        }
+
+                        .edit__btn {
+                            text-transform: Capitalize;
+                            @extend .read
+                        }
+
+                        .delete {
+                            text-transform: Capitalize;
+                            background: #FF2C2C;
+                            color: #fff;
+                            border: 2px solid #FF2C2C !important;
+
+                            &:hover {
+                                background-color: #fff;
+                                color: #FF2C2C;
+                            }
+
+                            @extend .read
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+.saved__empty {
+    min-height: 60vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 24px;
+    align-items: center;
+    padding: 48px 0;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.saved__empty-card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+
+    h2 {
+        margin: 12px 0 8px;
+        font-family: 'Roboto';
+        font-size: clamp(28px, 3vw, 36px);
+        font-weight: 700;
+    }
+
+    p {
+        margin: 0 0 20px;
+        color: #64748b;
+        font-size: 16px;
+    }
+}
+
+.saved__empty-tag {
+    display: inline-flex;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #0f172a;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.saved__empty-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: #1B5BF7;
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Roboto';
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 22px rgba(27, 91, 247, 0.25);
+    }
+}
+
+.saved__empty-art {
+    position: relative;
+    min-height: 220px;
+    border-radius: 24px;
+    background: radial-gradient(circle at 30% 30%, #e0f2ff, #f8fbff);
+    overflow: hidden;
+}
+
+.saved__empty-ring {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 10px solid rgba(27, 91, 247, 0.2);
+    top: 24px;
+    right: 32px;
+}
+
+.saved__empty-dot {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    background: #ffb44c;
+    bottom: 24px;
+    left: 32px;
+    box-shadow: 0 20px 40px rgba(255, 180, 76, 0.4);
+}
+
+@media (max-width: 980px) {
+    .saved {
+        .posts {
+            &__intro {
+                .posts__content {
+                    flex-direction: column;
+                    height: auto;
+
+                    img {
+                        width: 100%;
+                        height: 260px;
+                        object-fit: cover;
+                    }
+
+                    .right {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .saved {
+        .posts {
+            &__intro {
+                .posts__content {
+                    img {
+                        height: 220px;
+                    }
+
+                    .right {
+                        .posts__title {
+                            font-size: 24px;
+                        }
+
+                        &__btns {
+                            flex-wrap: wrap;
+                            gap: 12px;
+
+                            .read,
+                            .edit__btn,
+                            .delete {
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

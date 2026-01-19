@@ -1,0 +1,34 @@
+.overlay__backdrop {
+    width: 100%;
+    height: 100vh;
+    background-color: #00000087;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.overlay__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 546px;
+    height: 436px;
+    border-radius: 8px;
+    z-index: 11;
+    background-color: #fff;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    @media (max-width: 600px) {
+        width: 95%;
+    }
+    @media (max-width: 545px) {
+        width: 95%;
+        height: 90vh;
+    }
+}

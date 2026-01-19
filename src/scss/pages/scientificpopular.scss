@@ -1,0 +1,132 @@
+.scientific {
+    padding: 40px 0 60px;
+
+    &__title {
+        font-family: 'Roboto';
+        font-weight: 700;
+        font-size: clamp(24px, 3vw, 34px);
+        line-height: 1.2;
+        margin: 0 0 24px;
+    }
+
+    .posts__intro {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .posts__content {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        width: 100%;
+        height: 388px;
+        border-radius: 8px;
+    }
+
+    img {
+        width: 50%;
+        opacity: 1;
+        border-radius: 8px;
+    }
+
+    .right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 50%;
+
+        .posts__title {
+            font-family: Roboto;
+            font-weight: 500;
+            font-size: 36px;
+            line-height: 100%;
+        }
+
+        .posts__date-and-time {
+            font-family: Roboto;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 24px;
+            color: #AEBEC9;
+        }
+
+        .posts__descriptions {
+            font-family: Roboto;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 32px;
+        }
+
+        .right__btns {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .read {
+                width: 153px;
+                height: 48px;
+                border-radius: 8px;
+                border: 2px solid #1B5BF7;
+                color: white;
+                background-color: #1B5BF7;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-family: Roboto;
+                font-weight: 400;
+                font-size: 18px;
+                line-height: 24px;
+
+                &:hover {
+                    color: #1B5BF7;
+                    background-color: white;
+                    border: 2px solid #1B5BF7;
+                    transition: .4s;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 980px) {
+    .scientific {
+        .posts__content {
+            flex-direction: column;
+            height: auto;
+        }
+
+        img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+        }
+
+        .right {
+            width: 100%;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .scientific {
+        .posts__content img {
+            height: 220px;
+        }
+
+        .right {
+            .posts__title {
+                font-size: 24px;
+            }
+
+            .right__btns {
+                flex-wrap: wrap;
+                gap: 12px;
+
+                .read {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

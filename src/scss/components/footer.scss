@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+.footer {
+    width: 100%;
+    padding: 40px 10px;
+    background: #F9F9F9;
+    .sc{
+        @media (max-width: 768px) {
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+
+
+    .copyright {
+        font-family: DM Sans;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 100%;
+        letter-spacing: -0.2px;
+        color: #1E2833;
+        opacity: 50%;
+        margin-top: 20px;
+    }
+
+    .left {
+        @media (max-width: 768px) {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        img {
+            width: 103.5;
+            height: 34.50022506713867;
+            opacity: 1;
+            margin-bottom: 24px;
+        }
+
+        p {
+            font-family: DM Sans, sans-serif;
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 100%;
+            letter-spacing: -0.2px;
+            max-width: 395px;
+            @media (max-width: 875px) {
+                font-size: 12px;
+            }
+            @media (max-width: 768px) {
+                font-size: 15px;
+                display: flex;
+                text-align: center;
+                line-height: 140%;
+            }
+        }
+    }
+
+    .table {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        @media (max-width: 768px) {
+            align-items: center;
+            width: 100%;
+        }
+
+        p.table__text{
+            font-family: Inter;
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 100%;
+            letter-spacing: -0.23px;
+            @media (max-width: 875px) {
+                    font-size: 15px;
+                }
+            @media (max-width: 768px) {
+                    font-size: 18px;
+                }
+        }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            li {
+                font-family: Inter, sans-serif;
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 100%;
+                letter-spacing: -0.2px;
+                max-width: 160px;
+                @media (max-width: 875px) {
+                    font-size: 13px;
+                }
+                @media (max-width: 768px) {
+                    font-size: 16px;
+                    text-align: center;
+                    max-width: 100%;
+                    line-height: 140%;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 32px 16px;
+
+        .copyright {
+            text-align: center;
+        }
+
+        .sc {
+            gap: 28px;
+        }
+    }
+}
