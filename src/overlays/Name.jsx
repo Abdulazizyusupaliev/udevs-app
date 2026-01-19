@@ -159,7 +159,7 @@ export default function Name({ change }) {
       // await createAccount(userInfo.name, userInfo.password, userInfo.avatar);
       // await logIn(userInfo.name);
 
-      if (firstPassword.current.value.trim() == secondPassword.current.value.trim()) {
+      if (firstPassword.current.value.trim() === secondPassword.current.value.trim()) {
 
         userInfo.current = {
           name: userInfo.current.name,

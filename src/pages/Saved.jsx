@@ -1,10 +1,8 @@
 // import { Box, Button, Container, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../scss/pages/saved.scss'
-import { useState, useRef } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
-import Notfound from './NotFound'
 import { getItem } from '../hooks/useLocalStorage'
 import CircularProgress from '@mui/material/CircularProgress';
 import fallbackPostImage from '../images/post_fallback.svg'
@@ -48,24 +46,35 @@ const USER = gql`
     }
 `
 
+const getPostTimestamp = (post) => {
+  const dateValue = post?.date
+  if (!dateValue) return 0
+  const timeValue = post?.time && /^\d{2}:\d{2}/.test(post.time) ? post.time : '00:00'
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+    return new Date(`${dateValue}T${timeValue}:00`).getTime()
+  }
+  if (/^\d{2}\.\d{2}\.\d{2,4}$/.test(dateValue)) {
+    const [day, month, yearRaw] = dateValue.split('.')
+    const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
+    return new Date(`${year}-${month}-${day}T${timeValue}:00`).getTime()
+  }
+  const parsed = new Date(dateValue).getTime()
+  return Number.isNaN(parsed) ? 0 : parsed
+}
+
+const sortPosts = (posts = []) => [...posts].sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a))
+
 export default function Saved() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  const [isLoggedIn] = useState(() => {
     const stored = getItem('isLoggedIn');
     return stored || false; // or use [] for empty array
   });
   const id = isLoggedIn?.[0]?.documentId
   // const [pics, setPics] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7, avaPic8])
-  const { loading, error, data, refetch } = useQuery(USER, { fetchPolicy: 'network-only' })
-  const [currentUser, setCurrentUser] = useState(() => {
-    if (!data || !id) return { avatar: 7 }
-    return data.admins.find((e) => e.documentId === id) || { avatar: 7 }
-  })
+  const { loading, error, data } = useQuery(USER, { fetchPolicy: 'network-only' })
 
   // const [posts, setPosts] = useState(data ? data.admin : null)
-  const counter = useRef(0)
-  const userFollowing = useRef([])
-  const [dep, setDep] = useState(true)
   const [userPosts, setUserPosts] = useState([])
   const baseUrl = API_BASE_URL
   const getPostImageUrl = (image) => {
@@ -76,45 +85,14 @@ export default function Saved() {
     if (url.startsWith('/uploads')) return `${baseUrl}${url}`
     return `${baseUrl}${url}`
   }
-  const getPostTimestamp = (post) => {
-    const dateValue = post?.date
-    if (!dateValue) return 0
-    const timeValue = post?.time && /^\d{2}:\d{2}/.test(post.time) ? post.time : '00:00'
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-      return new Date(`${dateValue}T${timeValue}:00`).getTime()
-    }
-    if (/^\d{2}\.\d{2}\.\d{2,4}$/.test(dateValue)) {
-      const [day, month, yearRaw] = dateValue.split('.')
-      const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
-      return new Date(`${year}-${month}-${day}T${timeValue}:00`).getTime()
-    }
-    const parsed = new Date(dateValue).getTime()
-    return Number.isNaN(parsed) ? 0 : parsed
-  }
-  const sortPosts = (posts = []) => [...posts].sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a))
-
-  const following = (d = data) => {
-
-    for (let i = 0; i < d?.admins?.length; i++) {
-      if (d.admins[i]?.name === isLoggedIn?.[0]?.name) {
-        counter.current = [i, d.admins[i].documentId]
-        return userFollowing.current = d.admins[i].following || []
-
-      }
-    }
-    // console.log('worked');
-    // console.log(data);
-  }
   useEffect(() => {
-    following(data)
     const matchedUser = data?.admins?.find((e) => e.documentId === id) || { avatar: 7 }
-    setCurrentUser(matchedUser)
     const savedIds = new Set(matchedUser?.savedPosts || [])
     const savedPosts = data?.posts?.filter((post) => savedIds.has(post.documentId)) || []
     setUserPosts(sortPosts(savedPosts))
     // console.log(currentUser);
 
-  }, [dep, loading])
+  }, [data, id])
 
 
   const scrollToTheTop = () => {
@@ -124,9 +102,6 @@ export default function Saved() {
     })
   }
 
-  console.log(userPosts);
-
-
   if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: "70vh" }}><CircularProgress enableTrackSlot size="3rem" /></div>
   // if (loading) return <CircularProgress color="inherit" />
   if (error) {
@@ -134,7 +109,7 @@ export default function Saved() {
     return <p>Error</p>
   }
 
-  if (isLoggedIn == false) return <Register/>
+  if (isLoggedIn === false) return <Register/>
   if (!loading && userPosts.length === 0) {
     return (
       <Container>

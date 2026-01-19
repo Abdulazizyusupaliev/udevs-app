@@ -1,5 +1,5 @@
 import { Box, Button, Container, Typography } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import avaPic1 from '../images/avatars/1.png'
 import avaPic2 from '../images/avatars/two.png'
@@ -9,10 +9,8 @@ import avaPic5 from '../images/avatars/five.png'
 import avaPic6 from '../images/avatars/six.png'
 import avaPic7 from '../images/avatars/seven.png'
 import avaPic8 from '../images/avatars/user__logo.png'
-import { useState, useRef } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
-import loadingPic from '../images/loading.png'
 import Notfound from './NotFound'
 import { getItem } from '../hooks/useLocalStorage'
 import '../scss/pages/userdetails.scss'
@@ -58,17 +56,35 @@ const USER = gql`
     }
 `
 
+const getPostTimestamp = (post) => {
+    const dateValue = post?.date
+    if (!dateValue) return 0
+    const timeValue = post?.time && /^\d{2}:\d{2}/.test(post.time) ? post.time : '00:00'
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        return new Date(`${dateValue}T${timeValue}:00`).getTime()
+    }
+    if (/^\d{2}\.\d{2}\.\d{2,4}$/.test(dateValue)) {
+        const [day, month, yearRaw] = dateValue.split('.')
+        const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
+        return new Date(`${year}-${month}-${day}T${timeValue}:00`).getTime()
+    }
+    const parsed = new Date(dateValue).getTime()
+    return Number.isNaN(parsed) ? 0 : parsed
+}
+
+const sortPosts = (posts = []) => [...posts].sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a))
+
 
 export default function UserDetails() {
     const { id } = useParams()
-    const [pics, setPics] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7, avaPic8])
+    const pics = [avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7, avaPic8]
     const { loading, error, data, refetch } = useQuery(USER, {
         variables: { documentId: id }
     })
     const [currentUser, setCurrentUser] = useState(data ? data.admin : { avatar: 7 })
-    const [isLoggedIn, setIsLoggedIn] = useState(() => {
-        const stored = getItem('isLoggedIn');
-        return stored || false; // or use [] for empty array
+    const [isLoggedIn] = useState(() => {
+        const stored = getItem('isLoggedIn')
+        return stored || false
     })
 
     // const [posts, setPosts] = useState(data ? data.admin : null)
@@ -91,23 +107,6 @@ export default function UserDetails() {
         if (url.startsWith('/uploads')) return `${baseUrl}${url}`
         return `${baseUrl}${url}`
     }
-    const getPostTimestamp = (post) => {
-        const dateValue = post?.date
-        if (!dateValue) return 0
-        const timeValue = post?.time && /^\d{2}:\d{2}/.test(post.time) ? post.time : '00:00'
-        if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-            return new Date(`${dateValue}T${timeValue}:00`).getTime()
-        }
-        if (/^\d{2}\.\d{2}\.\d{2,4}$/.test(dateValue)) {
-            const [day, month, yearRaw] = dateValue.split('.')
-            const year = yearRaw.length === 2 ? `20${yearRaw}` : yearRaw
-            return new Date(`${year}-${month}-${day}T${timeValue}:00`).getTime()
-        }
-        const parsed = new Date(dateValue).getTime()
-        return Number.isNaN(parsed) ? 0 : parsed
-    }
-    const sortPosts = (posts = []) => [...posts].sort((a, b) => getPostTimestamp(b) - getPostTimestamp(a))
-
     const formatBirthDate = (value) => {
         if (!value) return '-'
         const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/)
@@ -123,23 +122,22 @@ export default function UserDetails() {
         return `${day}.${month}.${year}`
     }
 
-    const following = (d = data) => {
+    const updateFollowing = useCallback((d = data) => {
 
         for (let i = 0; i < d?.admins?.length; i++) {
             if (d.admins[i]?.name === isLoggedIn?.[0]?.name) {
                 counter.current = [i, d.admins[i].documentId]
-                return userFollowing.current = d.admins[i].following || []
+                userFollowing.current = d.admins[i].following || []
+                return userFollowing.current
 
             }
         }
-        // console.log('worked');
-        // console.log(data);
-    }
+        return userFollowing.current
+    }, [data, isLoggedIn])
     useEffect(() => {
-        following(data)
+        updateFollowing(data)
         setCurrentUser(data ? data.admin : { avatar: 7 })
         setUserPosts(sortPosts(data?.admin?.posts || []))
-        console.log(currentUser);
 
         if (userFollowing.current.includes(id)) {
             // console.log('followed');
@@ -150,7 +148,7 @@ export default function UserDetails() {
             // console.log(userFollowing.current);
         }
 
-    }, [dep, loading])
+    }, [data, dep, id, loading, updateFollowing])
 
 
 
@@ -172,7 +170,7 @@ export default function UserDetails() {
         } catch (error) { console.log(error); }
         // console.log('unfollowed successfully');
         const res = await refetch()
-        following(res.data)
+        updateFollowing(res.data)
         // console.log(res.data.admins[counter.current[0]].following);
         setMessage('Вы отписались')
         handleClick()
@@ -198,7 +196,7 @@ export default function UserDetails() {
             } catch (error) { console.log(error); }
             const res = await refetch()
             // console.log(res.data);
-            following(res.data)
+            updateFollowing(res.data)
             setMessage('Вы подписались')
             handleClick()
             setDep(!dep)
@@ -241,7 +239,7 @@ export default function UserDetails() {
         if (message === 'update' || message === 'post') {
             const res = await refetch()
             // console.log(res.data);
-            following(res.data)
+            updateFollowing(res.data)
             setUserPosts(sortPosts(res?.data?.admin?.posts || []))
             setMessage(message === 'post' ? 'Post updated' : 'Updated')
             handleClick()
@@ -270,7 +268,7 @@ export default function UserDetails() {
             handleClick()
         }
     }
-// MESSAGE START
+    // MESSAGE START
 
     const [open, setOpen] = React.useState(false);
 
@@ -289,11 +287,11 @@ export default function UserDetails() {
     // MESSAGE END
 
     const scrollToTheTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    })
-  }
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }
 
     // BACKDROP START
 

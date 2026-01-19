@@ -32,13 +32,13 @@ export default function Login({ change }) {
 
     const handleClick = (name, password) => {
         // console.log(data.admins)
-        if (name.value.trim().length == 0 && password.value.trim().length == 0) {
+        if (name.value.trim().length === 0 && password.value.trim().length === 0) {
             name.style.outline = '1px solid red'
             password.style.outline = '1px solid red'
-        } else if (name.value.trim().length == 0) {
+        } else if (name.value.trim().length === 0) {
             name.style.outline = '1px solid red'
             password.style.outline = 'none'
-        } else if (password.value.trim().length == 0) {
+        } else if (password.value.trim().length === 0) {
             name.style.outline = 'none'
             password.style.outline = '1px solid red'
         } else {
@@ -46,14 +46,14 @@ export default function Login({ change }) {
             password.style.outline = 'none'
             const currentUser = data?.filter(e => e.name === name.value.trim())
 
-            if (currentUser.length == 0) {
+            if (currentUser.length === 0) {
                 // console.log('no');
                 name.style.outline = '1px solid red'
                 password.style.outline = '1px solid red'
                 span.current.classList.add('active')
             } else {
                 // console.log(currentUser[0].name + ' ' + currentUser[0].password);
-                if (currentUser[0].password == password.value.trim()) {
+                if (currentUser[0].password === password.value.trim()) {
 
                     // console.log('success');
                     setItem('isLoggedIn', data?.filter(e => e.name === name.value.trim()))
