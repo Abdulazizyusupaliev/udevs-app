@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Box, Container, Typography, Button } from '@mui/material'
-import image from '../images/7775a8d0cf0551ef0c16735d7fa2ae9c65d4becf.jpg'
-import userImage from '../images/user.jpg'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Box, Container, Typography } from '@mui/material'
 import fallbackPostImage from '../images/post_fallback.svg'
 import { API_BASE_URL, apiUrl } from '../config/api'
 import '../scss/pages/details.scss'
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { data, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 // import useFetch from '../hooks/useFetch'
 // import useFetchId from '../hooks/useFetchId'
-import loadingPic from '../images/loading.png'
 import { useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
 import Notfound from './NotFound'
@@ -61,7 +58,7 @@ const POSTS = gql`
 export default function Details() {
     const { id } = useParams()
 
-    const [pics, setPics] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7])
+    const pics = [avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7]
     const baseUrl = API_BASE_URL
     const getPostImageUrl = (image) => {
         const imageValue = Array.isArray(image) ? image[0] : image
@@ -73,7 +70,7 @@ export default function Details() {
     }
 
 
-    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const [isLoggedIn] = useState(() => {
         const stored = getItem('isLoggedIn');
         return stored || false; // or use [] for empty array
     })
@@ -94,32 +91,36 @@ export default function Details() {
 
     // console.log(data);
 
-    const following = (d = data) => {
+    const updateFollowing = useCallback((d = data) => {
 
-        for (let i = 0; i < data?.admins?.length; i++) {
+        for (let i = 0; i < d?.admins?.length; i++) {
             if (d.admins[i]?.documentId === isLoggedIn?.[0]?.documentId) {
                 counter.current = [i, d.admins[i].documentId]
-                return userFollowing.current = d.admins[i].following || []
+                userFollowing.current = d.admins[i].following || []
+                return userFollowing.current
 
             }
         }
-    }
+        return userFollowing.current
+    }, [data, isLoggedIn])
 
-    const saved = (d = data) => {
+    const updateSaved = useCallback((d = data) => {
         for (let i = 0; i < d?.admins?.length; i++) {
             if (d?.admins[i]?.documentId === isLoggedIn?.[0]?.documentId) {
                 // counter.current = [i, d.admins[i].documentId]
-                return userSavedPosts.current = d.admins[i].savedPosts || []
+                userSavedPosts.current = d.admins[i].savedPosts || []
+                return userSavedPosts.current
 
             }
         }
+        return userSavedPosts.current
 
-    }
+    }, [data, isLoggedIn])
 
     // console.log(isLoggedIn) 
     useEffect(() => {
-        following()
-        saved()
+        updateFollowing()
+        updateSaved()
         // console.log(userSavedPosts.current);
         if (userFollowing.current.includes(data?.post?.admin?.documentId)) {
             // console.log('followed');
@@ -135,7 +136,7 @@ export default function Details() {
         }
         // console.log(isSaved + ' :');
         // console.log( userSavedPosts.current);
-    }, [dep, loading])
+    }, [data, dep, updateFollowing, updateSaved])
 
     const handleSave = async (id) => {
         if (getItem('isLoggedIn')) {
@@ -204,7 +205,7 @@ export default function Details() {
         } catch (error) { console.log(error); }
         console.log('unfollowed successfully');
         const res = await refetch()
-        following(res.data)
+        updateFollowing(res.data)
         // console.log(res.data.admins[counter.current[0]].following);
         setMessage('вы отписались')
         handleClick()
@@ -229,7 +230,7 @@ export default function Details() {
 
             } catch (error) { console.log(error); }
             const res = await refetch()
-            following(res.data)
+            updateFollowing(res.data)
             // console.log(res.data.admins[counter.current[0]].following);
             setMessage('вы подписались')
             handleClick()

@@ -73,12 +73,12 @@ const sortPosts = (posts = []) => [...posts].sort((a, b) => getPostTimestamp(b) 
 export default function Profile() {
 
 
-    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const [isLoggedIn] = useState(() => {
         const stored = getItem('isLoggedIn');
         return stored || false; // or use [] for empty array
     });
     const id = isLoggedIn?.[0]?.documentId
-    const [pics, setPics] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7, avaPic8])
+    const pics = [avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7, avaPic8]
     const { loading, error, data, refetch } = useQuery(USER)
     const [currentUser, setCurrentUser] = useState(() => {
         if (!data || !id) return { avatar: 7 }
