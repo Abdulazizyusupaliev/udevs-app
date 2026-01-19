@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
-import { data, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import '../scss/components/header.scss'
 import Udevs from '../images/udevs.png'
 import { Container } from '@mui/material'
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import { deleteItem, getItem } from '../hooks/useLocalStorage';
@@ -23,20 +22,18 @@ import avaPic7 from '../images/avatars/seven.png'
 
 
 export default function Header({ overlayState }) {
-    const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    const [isLoggedIn] = useState(() => {
         const stored = getItem('isLoggedIn');
         return stored || false; // or use [] for empty array
     })
 
-    const [notification, setNotification] = useState(false)
     const [open, setOpen] = useState(true)
-    const [avas, setAvas] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7])
+    const avas = [avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7]
 
     const navigationBar = () => {
         const navigationBar = document.querySelector('.navbar')
         const burgerBtn = document.querySelector('.burger__btn')
         const body = document.querySelector('body')
-        const backdrop = document.querySelector('.backdrop')
         navigationBar.classList.toggle('nav__active')
         burgerBtn.classList.toggle('.burger__active')
         open ? setOpen(false) : setOpen(true)

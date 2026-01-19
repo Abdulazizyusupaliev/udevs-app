@@ -1,10 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import '../scss/overlays/login.scss'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button';
-import { useQuery } from '@apollo/client/react'
-import { gql } from '@apollo/client'
-import { Password } from '@mui/icons-material';
 import { setItem } from '../hooks/useLocalStorage';
 import loadingPic from '../images/loading.png'
 import useFetch from '../hooks/useFetch'

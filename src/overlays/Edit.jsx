@@ -28,7 +28,7 @@ export default function Edit({ name, career, initialDate, place, documentId, upd
     useEffect(() => {
         setDate(initialDate || '')
         setDateWarning(getDateWarning(initialDate || ''))
-    }, [initialDate])
+    }, [getDateWarning, initialDate])
 
     const handleSave = async () => {
         const nameValue = userName.current?.value?.trim()

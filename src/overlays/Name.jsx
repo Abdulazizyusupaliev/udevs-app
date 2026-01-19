@@ -1,5 +1,5 @@
-import { Box, Button, useStepContext } from '@mui/material'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { Box, Button } from '@mui/material'
+import React, { useRef, useState } from 'react'
 import avaPic1 from '../images/avatars/1.png'
 import avaPic2 from '../images/avatars/two.png'
 import avaPic3 from '../images/avatars/three.png'
@@ -12,7 +12,6 @@ import { useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
 import loadingPic from '../images/loading.png'
 import axios from 'axios'
-import Login from './Login'
 import { setItem } from '../hooks/useLocalStorage'
 import { apiUrl } from '../config/api'
 
@@ -33,7 +32,7 @@ export default function Name({ change }) {
   const { loading, error, data, refetch } = useQuery(USERS)
 
   const [page, setPage] = useState(true)
-  const [avas, setAvas] = useState([avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7])
+  const avas = [avaPic1, avaPic2, avaPic3, avaPic4, avaPic5, avaPic6, avaPic7]
   // const [activePic, setActivePic] = useState(null)
   const [spanT, setSpanT] = useState('')
   // const [userInfo, setUserInfo] = useState({
